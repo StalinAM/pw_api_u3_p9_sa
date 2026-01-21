@@ -61,4 +61,12 @@ public class EstudianteService {
             this.estudianteRepository.delete(est);
         }
     }
+
+    public List<Estudiante> buscarPorProvincia(String provincia) {
+        return this.estudianteRepository.find("provincia", provincia).list();
+    }
+
+    public List<Estudiante> buscarPorGenero(String provincia, String genero) {
+        return this.estudianteRepository.find("provincia = ?1 and genero = ?2", provincia, genero).list();
+    }
 }
