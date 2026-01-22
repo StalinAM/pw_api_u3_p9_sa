@@ -19,49 +19,49 @@ public class MateriaResources {
     private MateriaService materiaService;
 
     @GET
-    @Path("/todas")
+    @Path("/")
     public List<Materia> listarTodas() {
         return this.materiaService.listarTodasLasMaterias();
     }
 
     @GET
-    @Path("/consultarPorCodigo/{codigo}")
+    @Path("/{codigo}")
     public Materia consultarPorCodigo(@PathParam("codigo") String codigo) {
         return this.materiaService.consultarPorCodigo(codigo);
     }
 
     @POST
-    @Path("/guardar")
+    @Path("")
     public void guardarMateria(Materia materia) {
         this.materiaService.crearMateria(materia);
     }
 
     @PUT
-    @Path("/actualizar/{codigo}")
+    @Path("/{codigo}")
     public void actualizarMateria(@PathParam("codigo") String codigo, Materia materia) {
         this.materiaService.actualizarMateria(codigo, materia);
     }
 
     @PATCH
-    @Path("/actualizarParcial/{codigo}")
+    @Path("/{codigo}")
     public void actualizarParcialmenteMateria(@PathParam("codigo") String codigo, Materia materia) {
         this.materiaService.actualizarParcialmenteMateria(codigo, materia);
     }
 
     @DELETE
-    @Path("/eliminar/{codigo}")
+    @Path("/{codigo}")
     public void eliminarMateria(@PathParam("codigo") String codigo) {
         this.materiaService.eliminarMateria(codigo);
     }
 
     @GET
-    @Path("/buscar/{texto}")
+    @Path("/texto/{texto}")
     public List<Materia> buscarPorTexto(@PathParam("texto") String texto) {
         return this.materiaService.buscarPorTexto(texto);
     }
 
     @GET
-    @Path("/porFacultad/{facultad}")
+    @Path("/facultad/{facultad}")
     public List<Materia> materiasPorFacultad(@PathParam("facultad") String facultad) {
         return this.materiaService.materiasPorFacultad(facultad);
     }
