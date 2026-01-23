@@ -5,6 +5,7 @@ import java.util.List;
 import javax.print.attribute.standard.Media;
 
 import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
@@ -34,12 +35,14 @@ public class EstudianteResources {
 
     @GET
     @Path("/{id}")
+    @Produces(MediaType.APPLICATION_XML)
     public Estudiante consultarPorId(@PathParam("id") Long id) {
         return this.estudianteService.consultarPorId(id);
     }
 
     @POST
     @Path("")
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response guardarEstudiante(Estudiante estudiante) {
         this.estudianteService.crearEstudiante(estudiante);
         return Response.status(Response.Status.CREATED).entity(estudiante).build();
@@ -47,6 +50,7 @@ public class EstudianteResources {
 
     @PUT
     @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public void actualizarEstudiante(@PathParam("id") Long id, Estudiante estudiante) {
         this.estudianteService.actualizarEstudiante(id, estudiante);
     }
@@ -55,7 +59,7 @@ public class EstudianteResources {
     @Path("/{id}")
     public Response actualizarParcialmenteEstudiante(@PathParam("id") Long id, Estudiante estudiante) {
         this.estudianteService.actualizarParcialmenteEstudiante(id, estudiante);
-        return Response.status(209).entity(null).build();
+        return Response.status(209).entity(this.estudianteService.consultarPorId(id)).build();
     }
 
     @DELETE
@@ -73,6 +77,7 @@ public class EstudianteResources {
 
     @GET
     @Path("/provincia/genero")
+    @Produces(MediaType.APPLICATION_XML)
     public List<Estudiante> buscarPorGenero(@QueryParam("provincia") String provincia,
             @QueryParam("genero") String genero) {
         return this.estudianteService.buscarPorGenero(provincia, genero);
