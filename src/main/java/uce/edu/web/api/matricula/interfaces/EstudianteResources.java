@@ -2,6 +2,8 @@ package uce.edu.web.api.matricula.interfaces;
 
 import java.util.List;
 
+import javax.print.attribute.standard.Media;
+
 import jakarta.inject.Inject;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -10,7 +12,10 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import uce.edu.web.api.matricula.application.EstudianteService;
 import uce.edu.web.api.matricula.domain.Estudiante;
 
@@ -21,6 +26,7 @@ public class EstudianteResources {
 
     @GET
     @Path("")
+    @Produces(MediaType.APPLICATION_JSON)
     public List<Estudiante> listarTodos() {
         System.out.println("Listando todos los estudiantes");
         return this.estudianteService.listarTodosLosEstudiantes();
@@ -34,8 +40,9 @@ public class EstudianteResources {
 
     @POST
     @Path("")
-    public void guardarEstudiante(Estudiante estudiante) {
+    public Response guardarEstudiante(Estudiante estudiante) {
         this.estudianteService.crearEstudiante(estudiante);
+        return Response.status(Response.Status.CREATED).entity(estudiante).build();
     }
 
     @PUT
@@ -46,8 +53,9 @@ public class EstudianteResources {
 
     @PATCH
     @Path("/{id}")
-    public void actualizarParcialmenteEstudiante(@PathParam("id") Long id, Estudiante estudiante) {
+    public Response actualizarParcialmenteEstudiante(@PathParam("id") Long id, Estudiante estudiante) {
         this.estudianteService.actualizarParcialmenteEstudiante(id, estudiante);
+        return Response.status(209).entity(null).build();
     }
 
     @DELETE
