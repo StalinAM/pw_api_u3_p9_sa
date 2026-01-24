@@ -7,6 +7,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import uce.edu.web.api.matricula.domain.Estudiante;
 import uce.edu.web.api.matricula.infrastructure.EstudianteRepository;
+import uce.edu.web.api.matricula.representation.EstudianteRepresentation;
 
 @ApplicationScoped
 
@@ -15,12 +16,16 @@ public class EstudianteService {
     @Inject
     private EstudianteRepository estudianteRepository;
 
-    public List<Estudiante> listarTodosLosEstudiantes() {
-        return this.estudianteRepository.listAll();
+    public List<EstudianteRepresentation> listarTodosLosEstudiantes() {
+        List<Estudiante> estudiantes = this.estudianteRepository.listAll();
+        return estudiantes.stream()
+                .map(this::mapperToER)
+                .toList();
     }
 
-    public Estudiante consultarPorId(Long id) {
-        return this.estudianteRepository.findById(id);
+    public EstudianteRepresentation consultarPorId(Long id) {
+        Estudiante estudiante = this.estudianteRepository.findById(id);
+        return this.mapperToER(estudiante);
     }
 
     @Transactional
@@ -29,8 +34,8 @@ public class EstudianteService {
     }
 
     @Transactional
-    public void actualizarEstudiante(Long id, Estudiante estudiante) {
-        Estudiante est = this.consultarPorId(id);
+    public void actualizarEstudiante(Long id, EstudianteRepresentation estudiante) {
+        Estudiante est = this.mapperToEstudiante(this.consultarPorId(id));
         if (est != null) {
             est.setNombre(estudiante.getNombre());
             est.setApellido(estudiante.getApellido());
@@ -40,8 +45,8 @@ public class EstudianteService {
     }
 
     @Transactional
-    public void actualizarParcialmenteEstudiante(Long id, Estudiante estudiante) {
-        Estudiante est = this.consultarPorId(id);
+    public void actualizarParcialmenteEstudiante(Long id, EstudianteRepresentation estudiante) {
+        Estudiante est = this.mapperToEstudiante(this.consultarPorId(id));
         if (estudiante.getNombre() != null) {
             est.setNombre(estudiante.getNombre());
         }
@@ -56,7 +61,7 @@ public class EstudianteService {
 
     @Transactional
     public void eliminarEstudiante(Long id) {
-        Estudiante est = this.consultarPorId(id);
+        Estudiante est = this.mapperToEstudiante(this.consultarPorId(id));
         if (est != null) {
             this.estudianteRepository.delete(est);
         }
@@ -69,4 +74,27 @@ public class EstudianteService {
     public List<Estudiante> buscarPorGenero(String provincia, String genero) {
         return this.estudianteRepository.find("provincia = ?1 and genero = ?2", provincia, genero).list();
     }
+
+    private EstudianteRepresentation mapperToER(Estudiante estudiante) {
+        EstudianteRepresentation estuR = new EstudianteRepresentation();
+        estuR.setId(estudiante.getId());
+        estuR.setNombre(estudiante.getNombre());
+        estuR.setApellido(estudiante.getApellido());
+        estuR.setFechaNacimiento(estudiante.getFechaNacimiento());
+        estuR.setProvincia(estudiante.getProvincia());
+        estuR.setGenero(estudiante.getGenero());
+        return estuR;
+    }
+
+    private Estudiante mapperToEstudiante(EstudianteRepresentation estuR) {
+        Estudiante estudiante = new Estudiante();
+        estudiante.setId(estuR.getId());
+        estudiante.setNombre(estuR.getNombre());
+        estudiante.setApellido(estuR.getApellido());
+        estudiante.setFechaNacimiento(estuR.getFechaNacimiento());
+        estudiante.setProvincia(estuR.getProvincia());
+        estudiante.setGenero(estuR.getGenero());
+        return estudiante;
+    }
+
 }
