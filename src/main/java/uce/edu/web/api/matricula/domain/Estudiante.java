@@ -13,12 +13,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "estudiante")
 @SequenceGenerator(name = "estudiante_seq", sequenceName = "estudiante_secuencia", allocationSize = 1)
-@XmlRootElement
 public class Estudiante extends PanacheEntityBase {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "estudiante_seq")
@@ -77,5 +75,13 @@ public class Estudiante extends PanacheEntityBase {
 
     public void setGenero(String genero) {
         this.genero = genero;
+    }
+
+    public List<Hijo> getHijos() {
+        return hijos;
+    }
+
+    public void setHijos(List<Hijo> hijos) {
+        this.hijos = hijos;
     }
 }

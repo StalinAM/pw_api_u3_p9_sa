@@ -29,50 +29,62 @@ public class EstudianteService {
     }
 
     @Transactional
-    public void crearEstudiante(Estudiante estudiante) {
+    public void crearEstudiante(EstudianteRepresentation estudianteR) {
+        Estudiante estudiante = this.mapperToEstudiante(estudianteR);
         this.estudianteRepository.persist(estudiante);
     }
 
     @Transactional
-    public void actualizarEstudiante(Long id, EstudianteRepresentation estudiante) {
+    public void actualizarEstudiante(Long id, EstudianteRepresentation estudianteR) {
         Estudiante est = this.mapperToEstudiante(this.consultarPorId(id));
         if (est != null) {
-            est.setNombre(estudiante.getNombre());
-            est.setApellido(estudiante.getApellido());
-            est.setFechaNacimiento(estudiante.getFechaNacimiento());
-            // La entidad est se actualiza automáticamente por dirty checking
+            if (estudianteR.getNombre() != null)
+                est.setNombre(estudianteR.getNombre());
+            if (estudianteR.getApellido() != null)
+                est.setApellido(estudianteR.getApellido());
+            if (estudianteR.getFechaNacimiento() != null)
+                est.setFechaNacimiento(estudianteR.getFechaNacimiento());
+            if (estudianteR.getProvincia() != null)
+                est.setProvincia(estudianteR.getProvincia());
+            if (estudianteR.getGenero() != null)
+                est.setGenero(estudianteR.getGenero());
         }
     }
 
     @Transactional
-    public void actualizarParcialmenteEstudiante(Long id, EstudianteRepresentation estudiante) {
+    public void actualizarParcialmenteEstudiante(Long id, EstudianteRepresentation estudianteR) {
         Estudiante est = this.mapperToEstudiante(this.consultarPorId(id));
-        if (estudiante.getNombre() != null) {
-            est.setNombre(estudiante.getNombre());
+        if (est != null) {
+            if (estudianteR.getNombre() != null)
+                est.setNombre(estudianteR.getNombre());
+            if (estudianteR.getApellido() != null)
+                est.setApellido(estudianteR.getApellido());
+            if (estudianteR.getFechaNacimiento() != null)
+                est.setFechaNacimiento(estudianteR.getFechaNacimiento());
+            if (estudianteR.getProvincia() != null)
+                est.setProvincia(estudianteR.getProvincia());
+            if (estudianteR.getGenero() != null)
+                est.setGenero(estudianteR.getGenero());
         }
-        if (estudiante.getApellido() != null) {
-            est.setApellido(estudiante.getApellido());
-        }
-        if (estudiante.getFechaNacimiento() != null) {
-            est.setFechaNacimiento(estudiante.getFechaNacimiento());
-        }
-        // La entidad est se actualiza automáticamente por dirty checking
     }
 
     @Transactional
     public void eliminarEstudiante(Long id) {
-        Estudiante est = this.mapperToEstudiante(this.consultarPorId(id));
+        Estudiante est = this.estudianteRepository.findById(id);
         if (est != null) {
             this.estudianteRepository.delete(est);
         }
     }
 
-    public List<Estudiante> buscarPorProvincia(String provincia) {
-        return this.estudianteRepository.find("provincia", provincia).list();
+    public List<EstudianteRepresentation> buscarPorProvincia(String provincia) {
+        List<Estudiante> estudiantes = this.estudianteRepository.find("provincia", provincia).list();
+        return estudiantes.stream().map(this::mapperToER).toList();
     }
 
-    public List<Estudiante> buscarPorGenero(String provincia, String genero) {
-        return this.estudianteRepository.find("provincia = ?1 and genero = ?2", provincia, genero).list();
+    public List<EstudianteRepresentation> buscarPorGenero(String provincia, String genero) {
+        List<Estudiante> estudiantes = this.estudianteRepository
+                .find("provincia = ?1 and genero = ?2", provincia, genero).list();
+        return estudiantes.stream().map(this::mapperToER).toList();
     }
 
     private EstudianteRepresentation mapperToER(Estudiante estudiante) {

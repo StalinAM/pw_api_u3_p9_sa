@@ -1,6 +1,7 @@
 package uce.edu.web.api.matricula.representation;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class EstudianteRepresentation {
 
@@ -10,6 +11,10 @@ public class EstudianteRepresentation {
     private LocalDateTime fechaNacimiento;
     private String provincia;
     private String genero;
+
+    private List<LinkDTO> links;
+
+    private List<HijoRepresentation> hijos;
 
     // Getters y Setters
     public Long getId() {
@@ -58,6 +63,22 @@ public class EstudianteRepresentation {
 
     public void setGenero(String genero) {
         this.genero = genero;
+    }
+
+    public List<HijoRepresentation> getHijos() {
+        return hijos;
+    }
+
+    public void setHijos(List<HijoRepresentation> hijos) {
+        this.hijos = hijos;
+    }
+
+    public List<LinkDTO> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<LinkDTO> links) {
+        this.links = links;
     }
 
 }
