@@ -36,7 +36,7 @@ public class EstudianteService {
 
     @Transactional
     public void actualizarEstudiante(Long id, EstudianteRepresentation estudianteR) {
-        Estudiante est = this.mapperToEstudiante(this.consultarPorId(id));
+        Estudiante est = this.estudianteRepository.findById(id);
         if (est != null) {
             if (estudianteR.getNombre() != null)
                 est.setNombre(estudianteR.getNombre());
@@ -53,7 +53,7 @@ public class EstudianteService {
 
     @Transactional
     public void actualizarParcialmenteEstudiante(Long id, EstudianteRepresentation estudianteR) {
-        Estudiante est = this.mapperToEstudiante(this.consultarPorId(id));
+        Estudiante est = this.estudianteRepository.findById(id);
         if (est != null) {
             if (estudianteR.getNombre() != null)
                 est.setNombre(estudianteR.getNombre());

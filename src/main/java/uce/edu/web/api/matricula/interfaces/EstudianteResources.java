@@ -62,8 +62,9 @@ public class EstudianteResources {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void actualizarEstudiante(@PathParam("id") Long id, EstudianteRepresentation estudiante) {
+    public Response actualizarEstudiante(@PathParam("id") Long id, EstudianteRepresentation estudiante) {
         this.estudianteService.actualizarEstudiante(id, estudiante);
+        return Response.status(209).entity(this.estudianteService.consultarPorId(id)).build();
     }
 
     @PATCH
@@ -72,7 +73,7 @@ public class EstudianteResources {
     @Produces(MediaType.APPLICATION_JSON)
     public Response actualizarParcialmenteEstudiante(@PathParam("id") Long id, EstudianteRepresentation estudiante) {
         this.estudianteService.actualizarParcialmenteEstudiante(id, estudiante);
-        return Response.status(209).entity(this.estudianteService.consultarPorId(id)).build();
+        return Response.status(210).entity(this.estudianteService.consultarPorId(id)).build();
     }
 
     @DELETE
